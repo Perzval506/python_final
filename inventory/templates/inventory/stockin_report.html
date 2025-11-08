@@ -1,0 +1,13 @@
+{% extends "inventory/base.html" %}
+{% block title %}Stock-In Report{% endblock %}
+{% block content %}
+<h1>Stock-In Report</h1>
+<p class="text-muted">Report view is wired. We’ll add totals/print later.</p>
+<ul class="list-group">
+  {% for r in rows %}
+    <li class="list-group-item">{{ r.delivered_at }} — {{ r.item }} × {{ r.quantity }} ({{ r.supplier|default:"—" }})</li>
+  {% empty %}
+    <li class="list-group-item text-muted">No data.</li>
+  {% endfor %}
+</ul>
+{% endblock %}

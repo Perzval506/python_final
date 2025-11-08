@@ -1,0 +1,40 @@
+{% extends "inventory/base.html" %}
+{% block title %}Record Stock-In{% endblock %}
+{% block content %}
+<h1 class="mb-3">Record Stock-In</h1>
+
+<form method="post" class="row g-2 mb-4 border rounded p-3 bg-white">
+  {% csrf_token %}
+  {{ form.non_field_errors }}
+  {% for field in form %}
+    <div class="col-md-4">
+      <label class="form-label">{{ field.label }}</label>
+      {{ field }}
+      {% if field.errors %}<div class="text-danger small">{{ field.errors }}</div>{% endif %}
+    </div>
+  {% endfor %}
+  <div class="col-12">
+    <button class="btn btn-primary">Save</button>
+  </div>
+</form>
+
+<h5>Recent Stock-Ins</h5>
+<div class="list-group">
+  {% for r in page_obj %}
+    <div class="list-group-item d-flex justify-content-between align-items-center">
+      <div>
+        <strong>#{{ r.id }}</strong> · {{ r.delivered_at }} · {{ r.item }} × {{ r.quantity }}
+      </div>
+      <div>
+        <a class="btn btn-sm btn-outline-primary" href="{% url 'inventory:stockin_edit' r.id %}">Edit</a>
+        <form class="d-inline" method="post" action="{% url 'inventory:stockin_delete' r.id %}">
+          {% csrf_token %}
+          <button class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete?')">Delete</button>
+        </form>
+      </div>
+    </div>
+  {% empty %}
+    <div class="text-muted">No records yet.</div>
+  {% endfor %}
+</div>
+{% endblock %}
